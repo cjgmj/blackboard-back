@@ -2,17 +2,19 @@ import { Socket } from 'socket.io';
 import { CanvasInfo } from '../models/canvas-info';
 import { CoordinatePoint } from '../models/coordinate-point';
 import { canvasList } from '../app';
+import { CanvasRequest } from '../models/canvas-request';
 
-const getCanvasOrCreate = (
-  socket: Socket,
-  id: string,
-  color: string,
-  lineWidth: number
-) => {
-  let canvas = canvasList.filter((canvas) => canvas.id === id)[0];
+const getCanvasOrCreate = (socket: Socket, canvasRequest: CanvasRequest) => {
+  let canvas = canvasList.filter((canvas) => canvas.id === canvasRequest.id)[0];
 
   if (canvas === undefined) {
-    canvas = { clientId: socket.id, id, color, lineWidth, brushPaths: [] };
+    canvas = {
+      clientId: socket.id,
+      id: canvasRequest.id,
+      color: canvasRequest.color,
+      lineWidth: canvasRequest.lineWidth,
+      brushPaths: [],
+    };
     canvasList.push(canvas);
   }
 

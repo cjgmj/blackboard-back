@@ -9,18 +9,10 @@ const listenSocket = (socket: Socket): void => {
 const drawMyBlackBoard = (socket: Socket): void => {
   socket.on(
     'drawMyBlackBoard',
-    (
-      { id, color, lineWidth, lastPoint }: CanvasRequest,
-      initialPoint: boolean
-    ) => {
-      const canvas = getCanvasOrCreate(socket, id, color, lineWidth);
-      saveBrushPath(canvas, initialPoint, lastPoint);
-      emitDrawOnClient(
-        socket,
-        { id, color, lineWidth, lastPoint } as CanvasRequest,
-        initialPoint
-      );
-      console.log(canvas);
+    (canvasRequest: CanvasRequest, initialPoint: boolean) => {
+      const canvas = getCanvasOrCreate(socket, canvasRequest);
+      saveBrushPath(canvas, initialPoint, canvasRequest.lastPoint);
+      emitDrawOnClient(socket, canvasRequest, initialPoint);
     }
   );
 };

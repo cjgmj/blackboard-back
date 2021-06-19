@@ -2,10 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveBrushPath = exports.getCanvasOrCreate = void 0;
 const app_1 = require("../app");
-const getCanvasOrCreate = (socket, id, color, lineWidth) => {
-    let canvas = app_1.canvasList.filter((canvas) => canvas.id === id)[0];
+const getCanvasOrCreate = (socket, canvasRequest) => {
+    let canvas = app_1.canvasList.filter((canvas) => canvas.id === canvasRequest.id)[0];
     if (canvas === undefined) {
-        canvas = { clientId: socket.id, id, color, lineWidth, brushPaths: [] };
+        canvas = {
+            clientId: socket.id,
+            id: canvasRequest.id,
+            color: canvasRequest.color,
+            lineWidth: canvasRequest.lineWidth,
+            brushPaths: [],
+        };
         app_1.canvasList.push(canvas);
     }
     return canvas;
