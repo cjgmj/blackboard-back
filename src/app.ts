@@ -1,14 +1,11 @@
-import express from 'express';
 import { Socket } from 'socket.io';
 
-import { CanvasRequest, CoordinatePoint } from './models/canvas-request';
-import { CanvasInfo, BrushPath } from './models/canvas-info';
+import { CanvasInfo } from './models/canvas-info';
+import { listenSocket } from './socket/socket';
 
-const canvasList: CanvasInfo[] = [];
+export let canvasList: CanvasInfo[] = [];
 
-const app = express();
-
-const server = require('http').createServer(app);
+const server = require('http').createServer();
 
 const io = require('socket.io')(server, {
   cors: {
@@ -20,45 +17,12 @@ const io = require('socket.io')(server, {
 io.on('connection', (socket: Socket) => {
   console.log('Client connected');
 
-  socket.on(
-    'drawMyBlackBoard',
-    ({ id, color, lastPoint }: CanvasRequest, initialPoint: Boolean) => {
-      // socket.emit('drawUserCanva');
-      const canvas = getCanvasOrCreate(id, color);
-      saveBrushPath(canvas, initialPoint, lastPoint);
-
-      console.log(canvas);
-    }
-  );
+  listenSocket(socket);
 
   socket.on('disconnect', () => {
+    canvasList = canvasList.filter((canvas) => canvas.clientId !== socket.id);
     console.log('Client disconnected');
   });
 });
 
 server.listen(3000, () => console.log('Listening on port 3000'));
-
-const getCanvasOrCreate = (id: string, color: string) => {
-  const canvas: CanvasInfo = canvasList.filter(
-    (canvas) => canvas.id === id
-  )[0] || { id, color, brushPaths: [] };
-
-  canvasList.push(canvas);
-
-  return canvas;
-};
-
-const saveBrushPath = (
-  canvas: CanvasInfo,
-  initialPoint: Boolean,
-  lastPoint: CoordinatePoint
-) => {
-  if (initialPoint) {
-    canvas.brushPaths.push({
-      initialPoint: lastPoint,
-      points: [],
-    } as BrushPath);
-  } else {
-    canvas.brushPaths[canvas.brushPaths.length - 1].points.push(lastPoint);
-  }
-};
