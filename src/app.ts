@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 
-import { CanvasInfo } from './models/canvas-info';
+import { CanvasInfo } from './types/canvas-info';
 import { listenSocket } from './socket/socket';
 
 export let canvasList: CanvasInfo[] = [];

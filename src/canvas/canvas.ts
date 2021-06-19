@@ -1,8 +1,9 @@
 import { Socket } from 'socket.io';
-import { CanvasInfo } from '../models/canvas-info';
-import { CoordinatePoint } from '../models/coordinate-point';
+
 import { canvasList } from '../app';
-import { CanvasRequest } from '../models/canvas-request';
+import { CanvasInfo } from '../types/canvas-info';
+import { CoordinatePoint } from '../types/coordinate-point';
+import { CanvasRequest } from '../types/canvas-request';
 
 const getCanvasOrCreate = (socket: Socket, canvasRequest: CanvasRequest) => {
   let canvas = canvasList.filter((canvas) => canvas.id === canvasRequest.id)[0];

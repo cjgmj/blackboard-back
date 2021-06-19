@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { getCanvasOrCreate, saveBrushPath } from '../canvas/canvas';
-import { CanvasRequest } from '../models/canvas-request';
+import { CanvasRequest } from '../types/canvas-request';
 
 const listenSocket = (socket: Socket): void => {
   drawMyBlackBoard(socket);
