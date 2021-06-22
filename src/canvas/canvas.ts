@@ -1,22 +1,23 @@
-import { Socket } from 'socket.io';
+import { getCanvasList } from '../data/data';
 
-import { canvasList } from '../app';
 import { CanvasClient } from '../types/canvas-client';
 import { CanvasInfo } from '../types/canvas-info';
 import { CoordinatePoint } from '../types/coordinate-point';
 
-const getCanvasOrCreate = (socket: Socket, canvasRequest: CanvasInfo) => {
-  let canvas = canvasList.filter((canvas) => canvas.id === canvasRequest.id)[0];
+const getCanvasOrCreate = (socketId: string, canvasRequest: CanvasInfo) => {
+  let canvas = getCanvasList().filter(
+    (canvas: CanvasClient) => canvas.id === canvasRequest.id
+  )[0];
 
   if (canvas === undefined) {
     canvas = {
-      clientId: socket.id,
+      clientId: socketId,
       id: canvasRequest.id,
       color: canvasRequest.color,
       lineWidth: canvasRequest.lineWidth,
       brushPaths: [],
     };
-    canvasList.push(canvas);
+    getCanvasList().push(canvas);
   }
 
   return canvas;

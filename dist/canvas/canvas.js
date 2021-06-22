@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveBrushPath = exports.getCanvasOrCreate = void 0;
-const app_1 = require("../app");
-const getCanvasOrCreate = (socket, canvasRequest) => {
-    let canvas = app_1.canvasList.filter((canvas) => canvas.id === canvasRequest.id)[0];
+const data_1 = require("../data/data");
+const getCanvasOrCreate = (socketId, canvasRequest) => {
+    let canvas = data_1.getCanvasList().filter((canvas) => canvas.id === canvasRequest.id)[0];
     if (canvas === undefined) {
         canvas = {
-            clientId: socket.id,
+            clientId: socketId,
             id: canvasRequest.id,
             color: canvasRequest.color,
             lineWidth: canvasRequest.lineWidth,
             brushPaths: [],
         };
-        app_1.canvasList.push(canvas);
+        data_1.getCanvasList().push(canvas);
     }
     return canvas;
 };
