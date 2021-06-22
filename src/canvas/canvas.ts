@@ -1,11 +1,11 @@
 import { Socket } from 'socket.io';
 
 import { canvasList } from '../app';
+import { CanvasClient } from '../types/canvas-client';
 import { CanvasInfo } from '../types/canvas-info';
 import { CoordinatePoint } from '../types/coordinate-point';
-import { CanvasRequest } from '../types/canvas-request';
 
-const getCanvasOrCreate = (socket: Socket, canvasRequest: CanvasRequest) => {
+const getCanvasOrCreate = (socket: Socket, canvasRequest: CanvasInfo) => {
   let canvas = canvasList.filter((canvas) => canvas.id === canvasRequest.id)[0];
 
   if (canvas === undefined) {
@@ -23,7 +23,7 @@ const getCanvasOrCreate = (socket: Socket, canvasRequest: CanvasRequest) => {
 };
 
 const saveBrushPath = (
-  canvas: CanvasInfo,
+  canvas: CanvasClient,
   initialPoint: Boolean,
   lastPoint: CoordinatePoint
 ) => {

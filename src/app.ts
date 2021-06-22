@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 
-import { CanvasInfo } from './types/canvas-info';
-import { listenSocket } from './socket/socket';
+import { emitDrawSessionBlackboard, listenSocket } from './socket/socket';
+import { CanvasClient } from './types/canvas-client';
 
-export let canvasList: CanvasInfo[] = [];
+export let canvasList: CanvasClient[] = [];
 
 const server = require('http').createServer();
 
@@ -17,12 +17,9 @@ const io = require('socket.io')(server, {
 io.on('connection', (socket: Socket) => {
   console.log('Client connected');
 
-  listenSocket(socket);
+  emitDrawSessionBlackboard(socket, canvasList);
 
-  socket.on('disconnect', () => {
-    canvasList = canvasList.filter((canvas) => canvas.clientId !== socket.id);
-    console.log('Client disconnected');
-  });
+  listenSocket(socket, canvasList);
 });
 
 server.listen(3000, () => console.log('Listening on port 3000'));

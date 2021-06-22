@@ -12,10 +12,7 @@ const io = require('socket.io')(server, {
 });
 io.on('connection', (socket) => {
     console.log('Client connected');
-    socket_1.listenSocket(socket);
-    socket.on('disconnect', () => {
-        exports.canvasList = exports.canvasList.filter((canvas) => canvas.clientId !== socket.id);
-        console.log('Client disconnected');
-    });
+    socket_1.emitDrawSessionBlackboard(socket, exports.canvasList);
+    socket_1.listenSocket(socket, exports.canvasList);
 });
 server.listen(3000, () => console.log('Listening on port 3000'));
